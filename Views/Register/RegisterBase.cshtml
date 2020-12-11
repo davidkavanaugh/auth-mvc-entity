@@ -1,7 +1,7 @@
 <h2>Register</h2>
 
 @model RegistrationRequest
-<form asp-action="PostUser" asp-controller="Auth" method="POST">
+<form asp-action="UserPost" asp-controller="Auth" method="POST">
     <label asp-for="FirstName"></label>
     <span class="red-text" asp-validation-for="FirstName"></span>
     <input asp-for="FirstName" />
