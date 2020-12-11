@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using AuthMVCEntity.Models;
+using Microsoft.AspNetCore.Http;
 
 namespace AuthMVCEntity.Controllers
 {
@@ -27,20 +28,40 @@ namespace AuthMVCEntity.Controllers
             return RedirectToAction("Register");
         }
         [HttpPost("users")]
-        public IActionResult CreateUser()
+        public IActionResult PostUser(RegistrationRequest request)
         {
-            return RedirectToAction("GetUser");
+            if (!ModelState.IsValid)
+            {
+                return View("../Register/RegisterBase");
+            }
+
+            User user = new User()
+            {
+                FirstName = request.FirstName,
+                LastName = request.LastName,
+                Email = request.Email,
+                Password = request.Password,
+                CreatedAt = DateTime.UtcNow,
+                UpdatedAt = DateTime.UtcNow
+            };
+
+            _context.Users.Add(user);
+            _context.SaveChanges();
+
+            HttpContext.Session.SetInt32("UserId", user.UserId);
+            return Redirect($"users/{user.UserId}");
         }
         [HttpGet("users/new")]
         public IActionResult Register()
         {
+
             return View("../Register/RegisterBase");
         }
 
         [HttpGet("users/{id}")]
         public IActionResult GetUser()
         {
-            return View("../Dashboard/DashbaordBase");
+            return View("../Dashboard/DashboardBase");
         }
 
         [HttpGet("login")]
