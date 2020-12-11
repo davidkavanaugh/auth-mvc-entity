@@ -30,7 +30,7 @@ namespace AuthMVCEntity.Controllers
             return RedirectToAction("Register");
         }
         [HttpPost("users")]
-        public IActionResult PostUser(RegistrationRequest request)
+        public IActionResult UserPost(RegistrationRequest request)
         {
             if (!ModelState.IsValid)
             {
@@ -57,25 +57,54 @@ namespace AuthMVCEntity.Controllers
             return Redirect($"users/{user.UserId}");
         }
         [HttpGet("users/new")]
-        public IActionResult Register()
+        public IActionResult RegisterGet()
         {
 
             return View("../Register/RegisterBase");
         }
 
         [HttpGet("users/{id}")]
-        public IActionResult GetUser()
+        public IActionResult UserGet()
         {
             return View("../Dashboard/DashboardBase");
         }
 
         [HttpGet("login")]
-        public IActionResult Login()
+        public IActionResult LoginGet()
         {
             return View("../Login/LoginBase");
         }
 
+        [HttpPost("login")]
+        public IActionResult LoginPost(LoginRequest request)
+        {
+            if (!ModelState.IsValid)
+            {
+                return View("../Login/LoginBase");
+            }
 
+            User user = _context.Users
+                .FirstOrDefault(user => user.Email == request.Email);
+
+            if (user == null)
+            {
+                ModelState.AddModelError("Email", "Invalid Email/Password");
+                return View("../Login/LoginBase");
+            }
+
+            var hasher = new PasswordHasher<LoginRequest>();
+
+            // verify provided password against hash stored in db
+            var result = hasher.VerifyHashedPassword(request, user.Password, request.Password);
+
+            if (result == 0)
+            {
+                ModelState.AddModelError("Email", "Invalid Email/Password");
+                return View("../Login/LoginBase");
+            }
+
+            return Redirect($"users/{user.UserId}");
+        }
 
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
         public IActionResult Error()

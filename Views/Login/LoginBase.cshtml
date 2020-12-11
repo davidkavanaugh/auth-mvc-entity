@@ -1,1 +1,14 @@
 <h2>Login</h2>
+
+@model LoginRequest
+<form asp-action="LoginPost" asp-controller="Auth" method="POST">
+    <label asp-for="Email"></label>
+    <span class="red-text" asp-validation-for="Email"></span>
+    <input asp-for="Email" />
+
+    <label asp-for="Password"></label>
+    <span class="red-text" asp-validation-for="Password"></span>
+    <input asp-for="Password" />
+
+    <input type="submit" value="Login" />
+</form>
