@@ -1,1 +1,26 @@
 <h2>Register</h2>
+
+@model RegistrationRequest
+<form asp-action="PostUser" asp-controller="Auth" method="POST">
+    <label asp-for="FirstName"></label>
+    <span class="red-text" asp-validation-for="FirstName"></span>
+    <input asp-for="FirstName" />
+
+    <label asp-for="LastName"></label>
+    <span class="red-text" asp-validation-for="LastName"></span>
+    <input asp-for="LastName" />
+
+    <label asp-for="Email"></label>
+    <span class="red-text" asp-validation-for="Email"></span>
+    <input asp-for="Email" />
+
+    <label asp-for="Password"></label>
+    <span class="red-text" asp-validation-for="Password"></span>
+    <input asp-for="Password" />
+
+    <label asp-for="Confirm"></label>
+    <span class="red-text" asp-validation-for="Confirm"></span>
+    <input asp-for="Confirm" />
+
+    <input type="submit" value="Submit" />
+</form>
