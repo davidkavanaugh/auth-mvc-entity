@@ -27,7 +27,7 @@ namespace AuthMVCEntity.Controllers
         [HttpGet("")]
         public IActionResult Index()
         {
-            return RedirectToAction("Register");
+            return RedirectToAction("RegisterGet");
         }
         [HttpPost("users")]
         public IActionResult UserPost(RegistrationRequest request)
