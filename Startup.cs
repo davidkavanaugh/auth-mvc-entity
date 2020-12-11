@@ -7,6 +7,8 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Microsoft.EntityFrameworkCore;
+using AuthMVCEntity.Models;
 
 namespace AuthMVCEntity
 {
@@ -22,6 +24,9 @@ namespace AuthMVCEntity
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            services.AddSession();
+            services.AddDbContext<AuthContext>(options => options.UseMySql(Configuration["DBInfo:ConnectionString"]));
+            services.AddMvc(options => options.EnableEndpointRouting = false);
             services.AddControllersWithViews();
         }
 
@@ -37,17 +42,19 @@ namespace AuthMVCEntity
                 app.UseExceptionHandler("/Home/Error");
             }
             app.UseStaticFiles();
-
-            app.UseRouting();
-
+            app.UseMvc();
+            app.UseSession();
             app.UseAuthorization();
 
-            app.UseEndpoints(endpoints =>
-            {
-                endpoints.MapControllerRoute(
-                    name: "default",
-                    pattern: "{controller=Home}/{action=Index}/{id?}");
-            });
+            // app.UseRouting();
+
+            // app.UseEndpoints(endpoints =>
+            // {
+            //     endpoints.MapControllerRoute(
+            //         name: "default",
+            //         pattern: "{controller=Home}/{action=Index}/{id?}");
+            // });
+
         }
     }
 }
