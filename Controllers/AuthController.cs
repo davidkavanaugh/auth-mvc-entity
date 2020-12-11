@@ -64,8 +64,13 @@ namespace AuthMVCEntity.Controllers
         }
 
         [HttpGet("users/{id}")]
-        public IActionResult UserGet()
+        public IActionResult UserGet(int id)
         {
+            if (HttpContext.Session.GetInt32("UserId") != id)
+            {
+                return RedirectToAction("LoginGet");
+            }
+            ViewBag.User = _context.Users.FirstOrDefault(user => user.UserId == id);
             return View("../Dashboard/DashboardBase");
         }
 
@@ -103,7 +108,15 @@ namespace AuthMVCEntity.Controllers
                 return View("../Login/LoginBase");
             }
 
+            HttpContext.Session.SetInt32("UserId", user.UserId);
+
             return Redirect($"users/{user.UserId}");
+        }
+        [HttpGet("logout")]
+        public IActionResult LogoutGet()
+        {
+            HttpContext.Session.Clear();
+            return RedirectToAction("LoginGet");
         }
 
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
