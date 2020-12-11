@@ -42,8 +42,8 @@ namespace AuthMVCEntity
                 app.UseExceptionHandler("/Home/Error");
             }
             app.UseStaticFiles();
-            app.UseMvc();
             app.UseSession();
+            app.UseMvc();
             app.UseAuthorization();
 
             // app.UseRouting();
