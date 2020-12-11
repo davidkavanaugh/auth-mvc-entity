@@ -7,6 +7,8 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using AuthMVCEntity.Models;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Identity;
+
 
 namespace AuthMVCEntity.Controllers
 {
@@ -34,6 +36,9 @@ namespace AuthMVCEntity.Controllers
             {
                 return View("../Register/RegisterBase");
             }
+
+            PasswordHasher<RegistrationRequest> Hasher = new PasswordHasher<RegistrationRequest>();
+            request.Password = Hasher.HashPassword(request, request.Password);
 
             User user = new User()
             {
